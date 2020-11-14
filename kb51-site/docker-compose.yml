@@ -1,0 +1,26 @@
+version: "2"
+services: 
+    mysql:
+        build: "mysql"
+        ports: 
+            - "3306:3306"
+        environment: 
+            - MYSQL_ROOT_PASSWORD=dct_[thyz
+            - MYSQL_DATABASE=site_kb51
+            - MYSQL_USER=www 
+            - MYSQL_PASSWORD=ghtk.,jltq
+    perl-fcgi:
+        build: "perl-fcgi"
+        ports: 
+            - "8999:8999"
+        volumes:
+            - "/net/users/artem/work/site-kb51:/html"    
+    nginx:
+        image: "nginx"
+        ports: 
+            - "80:80"
+        volumes:
+            - "/net/users/artem/work/site-kb51:/html"
+            - "/home/artem/work/docker/kb51-site/nginx/conf:/etc/nginx:ro"
+        
+

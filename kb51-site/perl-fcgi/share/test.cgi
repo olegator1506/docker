@@ -1,10 +1,10 @@
-#!/usr/bin/perl
+#!/usr/local/bin/perl
 use lib qw(.);
 require "module.cgi";
 use DBI;
 
 kb51_package::read_input();
-
+print "$]";
 # my $ConnectRes = kb51_package::db_Connect();
 my $ConnectRes = kb51_package::db_Connect_MIS();
 

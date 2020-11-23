@@ -1,2 +1,2 @@
 #!/bin/sh
-docker run -it --rm -v $(pwd)/share:/share  --name site-kb site-kb/perl-fcgi bash
+docker run  --rm -v $(pwd)/share:/share -p 8999:8999 --name site-kb site-kb/perl-fcgi 

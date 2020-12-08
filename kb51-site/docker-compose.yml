@@ -12,7 +12,7 @@ services:
     perl-fcgi:
         build: "perl-fcgi"
         ports: 
-            - "8999:8999"
+            - "8998:8999"
         volumes:
             - "/net/users/artem/work/site-kb51:/html"    
     nginx:

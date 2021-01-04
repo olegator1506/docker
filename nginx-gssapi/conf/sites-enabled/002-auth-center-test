@@ -1,0 +1,56 @@
+server {
+    listen 80;
+    listen 443 ssl http2;
+    root /application/public;
+    index  index.php index.html index.htm;
+    server_name auth-center.iss-reshetnev.ru auth-center.npopm.ru auth-center;
+
+    client_max_body_size 100M;
+    
+    access_log /var/log/nginx/auth-center-test_access.log;
+    error_log /var/log/nginx/auth-center-test_error.log;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;       
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+
+    location ~ \.php$ {
+        try_files $uri =404;
+	fastcgi_split_path_info  ^(.+\.php)(/.+)$;
+	fastcgi_index            index.php;
+#	fastcgi_pass             unix:/var/run/php/php7.0-fpm.sock;        # for Ubuntu 16.04
+	fastcgi_pass             10.1.8.0:8999;        # for Ubuntu 16.04
+        include                  fastcgi_params;
+#	fastcgi_param   PATH_INFO       $fastcgi_path_info;
+#### Для fpm в контейнере #########
+        fastcgi_param DOCUMENT_ROOT   /application/public;
+        fastcgi_param SCRIPT_FILENAME /application/public$fastcgi_script_name;
+#### Для fpm локального #########
+#        fastcgi_param DOCUMENT_ROOT   /home/artem/work/web/inet-portal/sites/auth-center/public;
+#        fastcgi_param SCRIPT_FILENAME /home/artem/work/web/inet-portal/sites/auth-center/public$fastcgi_script_name;
+    }
+    location /ad-login {
+        try_files $uri $uri/ /index.php?$query_string;       
+        auth_gss on;
+	auth_gss_realm ISS-RESHETNEV.RU;
+	auth_gss_keytab /etc/nginx/keytabs/auth-center-test.keytab;
+	auth_gss_service_name HTTP/auth-center-test.iss-reshetnev.ru;
+	auth_gss_allow_basic_fallback off;
+    }
+
+
+}
+
+

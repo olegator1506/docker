@@ -33,6 +33,9 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
         php7-xmlwriter \
         php7-zip \
 	php7-xdebug \
+	php7-ldap \
+	php7-mysqli \
+	openssl \
 	mc \
     && rm -rf /var/cache/apk/*
 

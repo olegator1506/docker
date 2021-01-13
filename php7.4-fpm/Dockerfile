@@ -1,4 +1,4 @@
-FROM php:7.4-alpine
+FROM php:7.4-fpm-alpine
 
 EXPOSE 9000
 
@@ -38,7 +38,6 @@ RUN apk add --no-cache \
     rsync \
     supervisor \
     zlib-dev \
-    php-fpm \
     mc
 
 # Install PECL and PEAR extensions
@@ -99,9 +98,9 @@ RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 # Cleanup dev dependencies
 RUN apk del -f .build-deps
 
-RUN rm -R /etc/php7
-COPY files/php7 /etc/php7
+#RUN rm -R /etc/php7
 COPY files/IssuingCA01.crt /etc/ssl/certs/IssuingCA01.crt
 COPY files/ldap.conf /etc/openldap/ldap.conf
-CMD ["php-fpm7","-F"]
+COPY files/php-include-path.ini /usr/local/etc/php/conf.d/php-include-path.ini
+CMD ["php-fpm","-F"]
 
